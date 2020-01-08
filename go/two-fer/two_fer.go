@@ -6,14 +6,10 @@ import "fmt"
 // ShareWith takes a string and return a concatenated text
 func ShareWith(name string) string {
 
-	var text string
-
 	if name == "" {
-		text = fmt.Sprintln("One for you, one for me.")
-		return text
+		name = "you"
 	}
-
-	text = fmt.Sprintf("One for %s, one for me.", name)
+	text := fmt.Sprintf("One for %s, one for me.", name)
 
 	return text
 }
