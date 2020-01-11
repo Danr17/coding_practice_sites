@@ -64,4 +64,10 @@ var testCases = []struct {
 		0,
 		true,
 	},
+	{
+		"aeüa",
+		"a€Ãa",
+		2,
+		false,
+	},
 }
