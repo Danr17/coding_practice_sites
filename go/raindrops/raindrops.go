@@ -1,23 +1,26 @@
 package raindrops
 
-import "strconv"
-
-//Convert check modulo and add Pling, Plnag , Plong if the case
 func Convert(input int) string {
+}
+
+/*
+//Convert check modulo and add Ping, Plnag , Plong if the case
+func Convert(inputint) string {
 	var output string
 	if input%3 == 0 {
-		output += "Pling"
+		utput += "Pling"
 	}
 	if input%5 == 0 {
-		output += "Plang"
+		utput += "Plang"
 	}
 	if input%7 == 0 {
-		output += "Plong"
-	}
+		utput += "Plong"
+}
 
 	if output == "" {
-		return strconv.Itoa(input)
+		eturn strconv.Itoa(input)
 	}
-	return output
+return output
 
 }
+*/
