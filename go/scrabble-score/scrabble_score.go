@@ -11,8 +11,8 @@ var letters = map[rune]int{'A': 1, 'B': 3, 'C': 3, 'D': 2, 'E': 1, 'F': 4, 'G': 
 func Score(input string) int {
 
 	number := 0
-	for i := range input {
-		number += letters[unicode.ToUpper(rune(input[i]))]
+	for _, r := range input {
+		number += letters[unicode.ToUpper(r)]
 	}
 
 	return number
