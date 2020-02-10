@@ -1,9 +1,9 @@
 def saddle_points(matrix):
     thePoints = []
-    maxLine
     for i, numList in enumerate(matrix):
-        for j, num in enumerate(numList):
-            if matrix[i][j] > maxLine
-
-
-    pass
+        if len(numList) != len(matrix[0]):
+            raise ValueError("irregular matrix")
+        for j in range(len(numList)):
+            if matrix[i][j] == max(numList) and matrix[i][j] == min([x[j] for x in matrix]):
+                thePoints.append({"row": i+1, "column": j+1})
+    return thePoints
