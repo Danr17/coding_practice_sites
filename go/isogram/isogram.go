@@ -8,10 +8,11 @@ func IsIsogram(input string) bool {
 		if !unicode.IsLetter(letter) {
 			continue
 		}
-		if _, ok := dictLetter[unicode.ToLower(letter)]; ok {
+		lowerLetter := unicode.ToLower(letter)
+		if dictLetter[lowerLetter] {
 			return false
 		}
-		dictLetter[unicode.ToLower(letter)] = true
+		dictLetter[lowerLetter] = true
 	}
 	return true
 }
