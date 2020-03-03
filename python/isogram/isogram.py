@@ -1,8 +1,9 @@
 def is_isogram(string: str) -> bool:
-    duplicates = {}
+    duplicates = set()
     for _, s in enumerate(string):
-        if s.isalpha() and s.lower() in duplicates:
+        s_lower = s.lower()
+        if s.isalpha() and s_lower in duplicates:
             return False
-        duplicates[s.lower()] = 1
+        duplicates.add(s_lower)
     return True
 
