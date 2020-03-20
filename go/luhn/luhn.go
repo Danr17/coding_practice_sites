@@ -1,21 +1,32 @@
 package luhn
 
-import "unicode"
+import (
+	"unicode"
+)
 
 func Valid(input string) bool {
-	sum := 0
+
+	sumDouble1 := 0
+	sumSimple1 := 0
+	sumDouble2 := 0
+	sumSimple2 := 0
 	counter := 0
-	for _, r := range reverse(input) {
+	for _, r := range input {
 
 		if unicode.IsDigit(r) {
 			val := int(r - '0')
-			if counter%2 == 1 {
-				val = (val * 2)
-				if val > 9 {
-					val = val - 9
-				}
+			doubleval := (val * 2)
+			if doubleval > 9 {
+				doubleval = doubleval - 9
+
 			}
-			sum += val
+			if counter%2 == 0 {
+				sumDouble1 += doubleval
+				sumSimple1 += val
+			} else {
+				sumDouble2 += doubleval
+				sumSimple2 += val
+			}
 			counter++
 			continue
 		}
@@ -30,13 +41,8 @@ func Valid(input string) bool {
 		return false
 	}
 
-	return (sum % 10) == 0
-}
-
-func reverse(s string) string {
-	r := []rune(s)
-	for i, j := 0, len(r)-1; i < len(r)/2; i, j = i+1, j-1 {
-		r[i], r[j] = r[j], r[i]
+	if counter%2 == 0 {
+		return ((sumDouble1 + sumSimple2) % 10) == 0
 	}
-	return string(r)
+	return ((sumDouble2 + sumSimple1) % 10) == 0
 }
