@@ -1,48 +1,38 @@
 package luhn
 
 import (
+	"strings"
 	"unicode"
 )
 
+//Valid checks if the number is a Luhn numbers
 func Valid(input string) bool {
 
-	sumDouble1 := 0
-	sumSimple1 := 0
-	sumDouble2 := 0
-	sumSimple2 := 0
-	counter := 0
+	input = strings.ReplaceAll(input, " ", "")
+
+	if len(input) < 2 {
+		return false
+	}
+
+	sum := 0
+	isEven := len(input)%2 == 0
 	for _, r := range input {
 
 		if unicode.IsDigit(r) {
 			val := int(r - '0')
-			doubleval := (val * 2)
-			if doubleval > 9 {
-				doubleval = doubleval - 9
-
+			if isEven {
+				val *= 2
+				if val > 9 {
+					val -= 9
+				}
 			}
-			if counter%2 == 0 {
-				sumDouble1 += doubleval
-				sumSimple1 += val
-			} else {
-				sumDouble2 += doubleval
-				sumSimple2 += val
-			}
-			counter++
+			sum += val
+			isEven = !isEven
 			continue
 		}
 
-		if unicode.IsSpace(r) {
-			continue
-		}
 		return false
 	}
 
-	if counter < 2 {
-		return false
-	}
-
-	if counter%2 == 0 {
-		return ((sumDouble1 + sumSimple2) % 10) == 0
-	}
-	return ((sumDouble2 + sumSimple1) % 10) == 0
+	return sum%10 == 0
 }
