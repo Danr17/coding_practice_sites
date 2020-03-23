@@ -18,20 +18,18 @@ func Valid(input string) bool {
 	isEven := len(input)%2 == 0
 	for _, r := range input {
 
-		if unicode.IsDigit(r) {
-			val := int(r - '0')
-			if isEven {
-				val *= 2
-				if val > 9 {
-					val -= 9
-				}
-			}
-			sum += val
-			isEven = !isEven
-			continue
+		if !unicode.IsDigit(r) {
+			return false
 		}
-
-		return false
+		val := int(r - '0')
+		if isEven {
+			val *= 2
+			if val > 9 {
+				val -= 9
+			}
+		}
+		sum += val
+		isEven = !isEven
 	}
 
 	return sum%10 == 0
