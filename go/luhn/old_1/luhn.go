@@ -27,27 +27,18 @@ func Valid(input string) bool {
 		return false
 	}
 
-	index := 0
-	if len(cleanInput)%2 == 0 {
-		index = 1
-	}
 	sum := 0
-	for _, n := range cleanInput {
-		index++
-		if index%2 == 0 {
-			if n*2 > 9 {
-				sum = sum + (n*2 - 9)
-				continue
+	isEven := len(cleanInput)%2 == 0
+	for _, val := range cleanInput {
+		if isEven {
+			val *= 2
+			if val > 9 {
+				val -= 9
 			}
-			sum = sum + n*2
-			continue
 		}
-		sum = sum + n
+		sum += val
+		isEven = !isEven
 	}
 
-	if sum%10 == 0 {
-		return true
-	}
-
-	return false
+	return sum%10 == 0
 }
