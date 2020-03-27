@@ -2,6 +2,7 @@ package grains
 
 import (
 	"errors"
+	"math"
 )
 
 //Square calculate how many grains are on a given square
@@ -11,7 +12,7 @@ func Square(input int) (uint64, error) {
 		return 0, errors.New("The value is out of range, 1 to 64 are allowed")
 	}
 
-	return 1 << (input - 1), nil
+	return uint64(math.Pow(2, float64(input-1))), nil
 }
 
 //Total calculate the total number of grains on the chessboard
