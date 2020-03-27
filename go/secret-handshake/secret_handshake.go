@@ -1,9 +1,5 @@
 package secret
 
-import (
-	"strconv"
-)
-
 var actions map[int]string = map[int]string{
 	0: "wink",
 	1: "double blink",
@@ -11,23 +7,25 @@ var actions map[int]string = map[int]string{
 	3: "jump",
 }
 
+//Handshake given a decimal number, convert it to the appropriate sequence of events for a secret handshake.
 func Handshake(code uint) []string {
 
-	var binStr string = strconv.FormatInt(int64(code), 2)
 	result := []string{}
-	idx := 0
 
-	for i := len(binStr); i > 0; i-- {
-		if i == 1 && len(binStr) == 5 {
-			if string(binStr[i-1]) == "1" {
-				result = reverse(result)
-				continue
-			}
-		}
-		if string(binStr[i-1]) == "1" {
-			result = append(result, actions[idx])
-		}
-		idx++
+	if code&(1<<0) != 0 {
+		result = append(result, "wink")
+	}
+	if code&(1<<1) != 0 {
+		result = append(result, "double blink")
+	}
+	if code&(1<<2) != 0 {
+		result = append(result, "close your eyes")
+	}
+	if code&(1<<3) != 0 {
+		result = append(result, "jump")
+	}
+	if code&(1<<4) != 0 {
+		result = reverse(result)
 	}
 	return result
 }
