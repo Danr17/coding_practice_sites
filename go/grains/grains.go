@@ -16,15 +16,5 @@ func Square(input int) (uint64, error) {
 
 //Total calculate the total number of grains on the chessboard
 func Total() uint64 {
-	var total uint64
-	n := 64
-	for n > 0 {
-		val, err := Square(n)
-		if err != nil {
-			return 0
-		}
-		total += val
-		n--
-	}
-	return total
+	return (1 << 64) - 1
 }
