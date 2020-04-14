@@ -8,32 +8,26 @@ type Clock struct {
 	m int
 }
 
-//SetTime is a function that returns a corected Clock struct
-func (c Clock) SetTime() Clock {
-	for c.m < 0 {
-		c.m += 60
-		c.h--
-	}
-	for c.h < 0 {
-		c.h += 24
-	}
-
-	c.h += int(c.m / 60)
-	c.m = c.m % 60
-	c.h = c.h % 24
-
-	return c
-}
-
 //New instantiate a Clock
 func New(hour, minute int) Clock {
 
-	c := Clock{
+	for minute < 0 {
+		minute += 60
+		hour--
+	}
+	for hour < 0 {
+		hour += 24
+	}
+
+	hour += int(minute / 60)
+	minute = minute % 60
+	hour = hour % 24
+
+	return Clock{
 		h: hour,
 		m: minute,
 	}
 
-	return c.SetTime()
 }
 
 func (c Clock) String() string {
@@ -44,13 +38,13 @@ func (c Clock) String() string {
 //Add minutes to the Clock
 func (c Clock) Add(minutes int) Clock {
 	c.m += minutes
-	return c.SetTime()
+	return New(c.h, c.m)
 
 }
 
 //Subtract minutes from the Clock
 func (c Clock) Subtract(minutes int) Clock {
 	c.m -= minutes
-	return c.SetTime()
+	return New(c.h, c.m)
 
 }
