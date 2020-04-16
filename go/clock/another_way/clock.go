@@ -5,7 +5,9 @@ package clock
 import "fmt"
 
 //Clock defines the Clock
-type Clock int
+type Clock struct {
+	minute int
+}
 
 //New instantiate a Clock
 func New(hour, minute int) Clock {
@@ -16,25 +18,25 @@ func New(hour, minute int) Clock {
 		min += (24 * 60)
 	}
 
-	return Clock(min)
+	return Clock{minute: min}
 
 }
 
 func (c Clock) String() string {
 
-	hour := int(c) / 60
-	minute := int(c) % 60
+	hour := c.minute / 60
+	minute := c.minute % 60
 
 	return fmt.Sprintf("%02d:%02d", hour, minute)
 }
 
 //Add minutes to the Clock
 func (c Clock) Add(minutes int) Clock {
-	return New(0, int(c)+minutes)
+	return New(0, c.minute+minutes)
 
 }
 
 //Subtract minutes from the Clock
 func (c Clock) Subtract(minutes int) Clock {
-	return New(0, int(c)-minutes)
+	return New(0, c.minute-minutes)
 }
