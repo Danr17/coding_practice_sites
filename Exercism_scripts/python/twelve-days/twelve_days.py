@@ -26,17 +26,18 @@ def recite(start_verse: int, end_verse: int) -> list:
         if i == 1:
             line += what[i -1] + "."
         else:
-            s = i
-            while s > 0: 
-                line += get_lyric(s - 1)
-                s -= 1
-    
+            line += get_lyric(i)
+        print(line)
         lyrics.append(line) 
         
     return lyrics
 
 def get_lyric(line: int) -> str:
-    if line == 0:
-        return "and " + what[line] + "."
-    else:
-        return  what[line] + ", "
+    lyric = ""
+    while line > 0: 
+        if line == 1:
+            lyric += "and " + what[line - 1] + "."
+            break
+        lyric += what[line - 1] + ", "
+        line -= 1
+    return lyric
