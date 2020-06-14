@@ -20,24 +20,23 @@ def recite(start_verse: int, end_verse: int) -> list:
     
     lyrics = []
     
-    for i in range(start_verse, end_verse + 1):
-        line = f'On the {numbers[i - 1]} day of Christmas my true love gave to me: '
+    for day in range(start_verse, end_verse + 1):
+        lyric = f'On the {numbers[day - 1]} day of Christmas my true love gave to me: '
 
-        if i == 1:
-            line += what[i -1] + "."
+        if day == 1:
+            lyric += what[day -1] + "."
         else:
-            line += get_lyric(i)
-        print(line)
-        lyrics.append(line) 
+            lyric += get_lyric(day)
+        lyrics.append(lyric) 
         
     return lyrics
 
-def get_lyric(line: int) -> str:
-    lyric = ""
-    while line > 0: 
-        if line == 1:
-            lyric += "and " + what[line - 1] + "."
+def get_lyric(day: int) -> str:
+    line = ""
+    while day > 0: 
+        if day == 1:
+            line += "and " + what[day - 1] + "."
             break
-        lyric += what[line - 1] + ", "
-        line -= 1
-    return lyric
+        line += what[day - 1] + ", "
+        day -= 1
+    return line
