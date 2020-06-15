@@ -17,26 +17,12 @@ what = ["a Partridge in a Pear Tree",
 def recite(start_verse: int, end_verse: int) -> list:
     if start_verse > end_verse or end_verse > 12:
         raise Exception("start_verse should be smaller than end_verse and end_verse should be smaller or equal to length of the song")
-    
-    lyrics = []
-    
-    for day in range(start_verse, end_verse + 1):
-        lyric = f'On the {numbers[day - 1]} day of Christmas my true love gave to me: '
+   
+    return [f'On the {numbers[day - 1]} day of Christmas my true love gave to me: ' + get_lyric(day) \
+        for day in range(start_verse, end_verse + 1)]
 
-        if day == 1:
-            lyric += what[day -1] + "."
-        else:
-            lyric += get_lyric(day)
-        lyrics.append(lyric) 
-        
-    return lyrics
-
-def get_lyric(day: int) -> str:
-    line = ""
-    while day > 0: 
-        if day == 1:
-            line += "and " + what[day - 1] + "."
-            break
-        line += what[day - 1] + ", "
-        day -= 1
-    return line
+def get_lyric(days: int) -> str:
+    if days == 1:
+        return  what[0] + "."
+    line = ', '.join([what[day-1] for day in reversed(range(1, days + 1)) if day > 1])
+    return line +  ", and " + what[0] + "." 
