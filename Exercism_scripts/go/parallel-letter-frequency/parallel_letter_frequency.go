@@ -20,31 +20,17 @@ func ConcurrentFrequency(blob []string) FreqMap {
 
 	for _, text := range blob {
 		go func(t string) {
-			result := FreqMap{}
-			for _, r := range t {
-				if _, ok := result[r]; !ok {
-					result[r] = 1
-				} else {
-					result[r]++
-				}
-			}
-			results <- result
+			results <- Frequency(t)
 		}(text)
 	}
 
-	for i := 0; i < len(blob); i++ {
+	for range blob {
 		temp := <-results
 		for index, value := range temp {
-
-			if _, ok := finalResult[index]; !ok {
-				finalResult[index] = value
-			} else {
-				finalResult[index] += value
-			}
+			finalResult[index] += value
 		}
 
 	}
 
-	close(results)
 	return finalResult
 }
