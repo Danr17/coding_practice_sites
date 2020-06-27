@@ -10,9 +10,7 @@ const MINUTES_PER_HOUR: i32 = 60;
 
 impl Clock {
     pub fn new(hours: i32, minutes: i32) -> Self {
-        let min = (((hours * MINUTES_PER_HOUR + minutes).rem_euclid(MINUTES_PER_DAY))
-            + MINUTES_PER_DAY)
-            .rem_euclid(MINUTES_PER_DAY);
+        let min = (hours * MINUTES_PER_HOUR + minutes).rem_euclid(MINUTES_PER_DAY);
         Clock { minutes: min }
     }
     pub fn add_minutes(&self, minutes: i32) -> Self {
