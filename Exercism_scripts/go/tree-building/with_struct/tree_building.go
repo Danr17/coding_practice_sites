@@ -28,7 +28,7 @@ func Build(records []Record) (*Node, error) {
 		return records[i].ID < records[j].ID
 	})
 
-	var tree = map[int]*Node{}
+	tree := Node{}
 
 	for idx, record := range records {
 		if idx != record.ID {
@@ -40,17 +40,35 @@ func Build(records []Record) (*Node, error) {
 		if record.ID > 0 && record.ID == record.Parent {
 			return nil, errors.New("Invalid tree, inner cycle")
 		}
-		subtree := &Node{ID: record.ID}
-		tree[record.ID] = subtree
+		if record.ID == 0 && record.Parent == 0 {
+			tree.ID = 0
+			continue
+		}
+		if err := findAndAdd(&tree, record); err != nil {
+			return nil, err
+		}
+	}
 
-		if record.ID != 0 {
-			if parent, ok := tree[record.Parent]; ok {
-				parent.Children = append(parent.Children, subtree)
-			} else {
-				return nil, errors.New("parent node does not exist")
+	return &tree, nil
+
+}
+
+func findAndAdd(tree *Node, record Record) error {
+
+	if tree.ID == record.Parent {
+		for _, node := range tree.Children {
+			if node.ID == record.ID {
+				return errors.New("duplicate ID")
 			}
 		}
-
+		tree.Children = append(tree.Children, &Node{ID: record.ID})
+		return nil
 	}
-	return tree[0], nil
+	if len(tree.Children) == 0 {
+		return nil
+	}
+	for i := range tree.Children {
+		findAndAdd(tree.Children[i], record)
+	}
+	return nil
 }
