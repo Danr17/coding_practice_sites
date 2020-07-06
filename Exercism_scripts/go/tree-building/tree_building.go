@@ -26,19 +26,16 @@ func Build(records []Record) (*Node, error) {
 
 	var tree = map[int]*Node{}
 
-	for idx, record := range records {
-		if idx != record.ID || record.ID < record.Parent || record.ID > 0 && record.ID == record.Parent {
+	for idx, r := range records {
+		if idx != r.ID || r.ID < r.Parent || r.ID > 0 && r.ID == r.Parent {
 			return nil, errors.New("not in sequence or has invaid parent")
 		}
-		subtree := &Node{ID: record.ID}
-		tree[record.ID] = subtree
+		subtree := &Node{ID: r.ID}
+		tree[r.ID] = subtree
 
-		if record.ID != 0 {
-			if parent, ok := tree[record.Parent]; ok {
-				parent.Children = append(parent.Children, subtree)
-			} else {
-				return nil, errors.New("parent node does not exist")
-			}
+		if r.ID != 0 {
+			p := tree[r.Parent]
+			p.Children = append(p.Children, tree[r.ID])
 		}
 
 	}
