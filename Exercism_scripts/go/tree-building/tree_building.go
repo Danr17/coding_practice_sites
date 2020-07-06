@@ -20,10 +20,6 @@ type Node struct {
 //Build is the function for constructing the tree
 func Build(records []Record) (*Node, error) {
 
-	if len(records) == 0 {
-		return nil, nil
-	}
-
 	sort.Slice(records, func(i, j int) bool {
 		return records[i].ID < records[j].ID
 	})
@@ -31,14 +27,8 @@ func Build(records []Record) (*Node, error) {
 	var tree = map[int]*Node{}
 
 	for idx, record := range records {
-		if idx != record.ID {
-			return nil, errors.New("Invalid tree")
-		}
-		if record.ID < record.Parent {
-			return nil, errors.New("Invalid tree, higher id parent of lower id")
-		}
-		if record.ID > 0 && record.ID == record.Parent {
-			return nil, errors.New("Invalid tree, inner cycle")
+		if idx != record.ID || record.ID < record.Parent || record.ID > 0 && record.ID == record.Parent {
+			return nil, errors.New("not in sequence or has invaid parent")
 		}
 		subtree := &Node{ID: record.ID}
 		tree[record.ID] = subtree
