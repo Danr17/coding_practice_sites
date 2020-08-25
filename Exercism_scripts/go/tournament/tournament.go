@@ -33,9 +33,9 @@ func Tally(input io.Reader, output io.Writer) error {
 	return nil
 }
 
-func read(input io.Reader) (map[string]result, error) {
+func read(input io.Reader) (map[string]*result, error) {
 	scanner := bufio.NewScanner(input)
-	results := make(map[string]result)
+	results := make(map[string]*result)
 
 	//parse each line and populate the map/struct
 	for scanner.Scan() {
@@ -49,38 +49,35 @@ func read(input io.Reader) (map[string]result, error) {
 			return nil, errors.New("wrong input, should include the teams and the match result")
 		}
 		team1, team2, score := splittedLine[0], splittedLine[1], splittedLine[2]
+		if _, ok := results[team1]; !ok {
+			results[team1] = new(result)
+		}
+		if _, ok := results[team2]; !ok {
+			results[team2] = new(result)
+		}
 		switch score {
 		case "win":
-			results[team1] = result{
-				mp:     +1,
-				win:    +1,
-				points: +3,
-			}
-			results[team2] = result{
-				mp:   +1,
-				loss: +1,
-			}
+			results[team1].mp++
+			results[team1].win++
+			results[team1].points += 3
+
+			results[team2].mp++
+			results[team2].loss++
 		case "loss":
-			results[team1] = result{
-				mp:   +1,
-				loss: +1,
-			}
-			results[team2] = result{
-				mp:     +1,
-				win:    +1,
-				points: +3,
-			}
+			results[team2].mp++
+			results[team2].win++
+			results[team2].points += 3
+
+			results[team1].mp++
+			results[team1].loss++
 		case "draw":
-			results[team1] = result{
-				mp:     +1,
-				draw:   +1,
-				points: +1,
-			}
-			results[team2] = result{
-				mp:     +1,
-				draw:   +1,
-				points: +1,
-			}
+			results[team1].mp++
+			results[team1].draw++
+			results[team1].points++
+
+			results[team2].mp++
+			results[team2].draw++
+			results[team2].points++
 		default:
 			return nil, errors.New("The game result is invalid, should be: win, loss or draw")
 		}
@@ -89,29 +86,25 @@ func read(input io.Reader) (map[string]result, error) {
 	return results, nil
 }
 
-func createTable(teamsScores map[string]result, output io.Writer) error {
+func createTable(teamsScores map[string]*result, output io.Writer) error {
 
-	table := make([]result, len(teamsScores))
+	table := []result{}
 	for team, score := range teamsScores {
 		score.team = team
-		table = append(table, score)
+		table = append(table, *score)
 	}
 	sort.Slice(table, func(i, j int) bool {
+		if table[i].points == table[j].points {
+			return table[i].team < table[j].team
+		}
 		return table[i].points > table[j].points
 	})
 
-	fmt.Println(table)
-
 	output.Write([]byte("Team                           | MP |  W |  D |  L |  P\n"))
 	for _, team := range table {
-		line := fmt.Sprintf("%s                           | %d |  %d |  %d |  %d |  %d\n", team.team, team.mp, team.win, team.draw, team.loss, team.points)
+		line := fmt.Sprintf("%-31s|  %d |  %d |  %d |  %d |  %d\n", team.team, team.mp, team.win, team.draw, team.loss, team.points)
 		output.Write([]byte(line))
 	}
-
-	//for each team calculate the points and create a map[points]string (string is tha name of the team,
-	//can be multiple teams on the same points)
-
-	// write the wiriter in the right form
 
 	return nil
 
