@@ -8,47 +8,32 @@ pub enum Comparison {
 
 pub fn sublist<T: PartialEq>(_first_list: &[T], _second_list: &[T]) -> Comparison {
     match (_first_list, _second_list) {
-        (&[], &[]) => {
-            Comparison::Equal
-        }
-        (&[], _) => {
-            Comparison::Sublist
-        }
-        (_, &[]) => {
+        (&[], &[]) => Comparison::Equal,
+        (&[], _) => Comparison::Sublist,
+        (_, &[]) => Comparison::Superlist,
+        (&[..], &[..]) if _first_list == _second_list => Comparison::Equal,
+        (&[..], &[..])
+            if _first_list.len() > _second_list.len() && contains(_first_list, _second_list) =>
+        {
             Comparison::Superlist
         }
-        (&[..], &[..]) if _first_list ==_second_list => {
-            Comparison::Equal
-        }
-        (&[..], &[..]) if _first_list.contains_slice(_second_list) => {
-            Comparison::Superlist
-        }
-        (&[..], &[..]) if _second_list.contains_slice(_first_list) => {
+        (&[..], &[..])
+            if _first_list.len() < _second_list.len() && contains(_second_list, _first_list) =>
+        {
             Comparison::Sublist
         }
-        (&[..], &[..]) => {
-            Comparison::Unequal
-        }
+        (&[..], &[..]) => Comparison::Unequal,
     }
 }
 
-trait Container<T>{
-    fn contains_slice(&self, items: &[T]) -> bool;
-}
-
-impl<T> Container<T> for &[T]
-where T: PartialEq
+fn contains<T>(list1: &[T], list2: &[T]) -> bool
+where
+    T: PartialEq,
 {
-    fn contains_slice(&self, needle: &[T]) -> bool {
-        let mut index = 0;
-        while index < self.len() {
-            
-            if self[index..].starts_with(needle) {
-                return true
-            }
-            index += 1;
+    for s in list1.windows(list2.len()) {
+        if s == list2 {
+            return true;
         }
-        return false
     }
-
+    return false;
 }
